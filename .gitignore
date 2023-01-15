@@ -66,5 +66,3 @@ postgres_data
 *.sw?
 
 README.md
-package.json
-package-lock.json
