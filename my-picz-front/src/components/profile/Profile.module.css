@@ -1,0 +1,41 @@
+.verticalContainer {
+  display: flex;
+  justify-content: center;
+}
+.verticalCol {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.verticalStack {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+}
+.verticalContainer img {
+  border: 0px;
+}
+
+.verticalCol h6 {
+  padding: 0;
+  margin-bottom: 0;
+  font-size: 0.8rem;
+}
+
+.icon {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 2rem;
+  color: black;
+}
+.icon:hover {
+  color: rgb(66, 119, 43);
+  font-size: 2.5rem;
+}
+
+@media (max-width: 575px) {
+  .verticalContainer img {
+    text-align: center;
+    max-width: 75%;
+  }
+}

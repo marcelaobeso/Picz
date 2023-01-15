@@ -1,0 +1,9 @@
+.box {
+  text-align: center;
+}
+.box > *:first-child {
+  align-self: center;
+}
+.box .button {
+  text-align: center;
+}
