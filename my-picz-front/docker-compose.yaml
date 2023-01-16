@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: gcp-docker-app
+    image: gcr.io/piczapp/marcelaobeso/picz-front-amd-v1:latest
+    ports:
+      - 8080:80

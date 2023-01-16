@@ -9,6 +9,7 @@ import { faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { usePrivate } from "../hooks/usePrivate";
 import { setCookie } from "../utils/cookieFactory";
+import Gravatar from "react-gravatar";
 
 export const Profile = () => {
   const { idUser: id } = useSelector((state) => state.signUp.userInfo);
@@ -44,13 +45,14 @@ export const Profile = () => {
       <Container>
         <Row sm={3} xs={1}>
           <Col className={`${styles["verticalContainer"]}`}>
-            <Image
+            {/* <Image
               src={gravatar}
               roundedCircle
               thumbnail
               fluid
               alt="a smiling robot grayscale"
-            />
+            /> */}
+            <Gravatar email={user?.email} size={200} />
           </Col>
           <Col sm={{ order: "first" }} lg={{ order: "first" }}>
             <Card>

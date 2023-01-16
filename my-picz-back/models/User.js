@@ -55,7 +55,6 @@ const updateUser = async (req) => {
     [username, email, idUser]
   );
   // firstName,
-  console.log(firstName);
   if (firstName) {
     const res = await pool.query(
       "UPDATE PERSON SET firstname = $1 WHERE id_user = $2",

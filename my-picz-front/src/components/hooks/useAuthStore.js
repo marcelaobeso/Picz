@@ -1,3 +1,4 @@
+import md5 from "md5";
 import { useDispatch, useSelector } from "react-redux";
 import piczApi from "../../api/piczApi";
 import { setAlert } from "../../store/slices/alertSlice/alertSlice";
@@ -36,12 +37,14 @@ export const useAuthStore = () => {
           email: data.email,
         })
       );
+
       dispatch(
         messageFieldsValidator({
           ...validFields,
           message: "",
         })
       );
+
       dispatch(loginUser());
     } catch (error) {
       dispatch(usernameFieldsValidator({ ...validFields, username: false }));
@@ -62,6 +65,7 @@ export const useAuthStore = () => {
     idUser,
     bio,
   }) => {
+    const hashEmail = md5(email);
     try {
       const { data } = await piczApi.post("/auth/sign", {
         email,
@@ -71,7 +75,7 @@ export const useAuthStore = () => {
         lastName,
         bio,
         idUser,
-        gravatar: "https://",
+        gravatar: `https://www.gravatar.com/avatar/${hashEmail}`,
       });
       localStorage.setItem("token", data.token);
       localStorage.setItem("token-init-date", new Date().getTime());

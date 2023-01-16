@@ -1,4 +1,6 @@
 const { response } = require("express");
+const { SECRET_JWT_SEED } = require("./database/environment");
+
 const jwt = require("jsonwebtoken");
 
 const validateJWT = (req, res = response, next) => {
@@ -10,7 +12,7 @@ const validateJWT = (req, res = response, next) => {
     });
   }
   try {
-    const { id, name } = jwt.verify(token, process.env.SECRET_JWT_SEED);
+    const { id, name } = jwt.verify(token, SECRET_JWT_SEED);
     req.id = id;
     req.name = name;
   } catch {
