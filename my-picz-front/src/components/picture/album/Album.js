@@ -11,15 +11,11 @@ export const Album = () => {
   const setAlbumId = (i) => {
     dispatch(selectedAlbum({ ...album, id_album: i }));
   };
-  return (
-    <>
-      {albumList?.map((i) => (
-        <Link to={`/album`}>
-          <Button key={i.id_album} onClick={setAlbumId(i.id_album)}>
-            {i.name}
-          </Button>
-        </Link>
-      ))}
-    </>
-  );
+  return albumList?.map((i) => (
+    <Link to={`/album`}>
+      <Button key={i.id_album} onClick={setAlbumId(i.id_album)}>
+        {i.name}
+      </Button>
+    </Link>
+  ));
 };

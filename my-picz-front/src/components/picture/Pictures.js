@@ -1,5 +1,7 @@
+import { faCameraRetro } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Link } from "react-router-dom";
@@ -10,6 +12,7 @@ import { AddPicture } from "./AddPicture/AddPicture";
 import { Album } from "./album/Album";
 import { ModalForm } from "./Description/ModalForm";
 import { Picture } from "./Picture";
+import "./Pictures.css";
 
 export const Pictures = () => {
   const [selected, setSelected] = useState(null);
@@ -22,6 +25,7 @@ export const Pictures = () => {
   };
   useEffect(() => {
     dispatch(getAllPictures());
+    dispatch(getAlbum());
   }, []);
 
   const setAlbumId = (i) => {
@@ -57,11 +61,24 @@ export const Pictures = () => {
           )}
 
           {albumList?.map((i) => (
-            <Link to={`/album`}>
-              <Button key={i.id_album} onClick={setAlbumId(i.id_album)}>
-                {i.name}
-              </Button>
-            </Link>
+            <div className="album">
+              <Link key={"link" + i.id_album} to={`/album`}>
+                <Button
+                  className="albumButton"
+                  variant="link"
+                  key={i.id_album}
+                  onClick={() => setAlbumId(i.id_album)}
+                >
+                  <Col>
+                    <FontAwesomeIcon
+                      icon={faCameraRetro}
+                      style={{ fontSize: "3rem" }}
+                    />
+                    <p>Album {i.name}</p>
+                  </Col>
+                </Button>
+              </Link>
+            </div>
           ))}
         </Masonry>
       </ResponsiveMasonry>

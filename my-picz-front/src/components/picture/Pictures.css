@@ -1,0 +1,8 @@
+.album {
+  display: "block";
+}
+.albumButton {
+  padding: 2rem;
+  border: 4px dotted blue;
+  margin: 1rem;
+}
