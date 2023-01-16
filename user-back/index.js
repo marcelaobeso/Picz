@@ -13,11 +13,9 @@ app.use(express.urlencoded({ extended: false })); // for form data
 
 //Routes
 
-// auth, login, create, update user info
-app.use("/api/auth", require("./routes/auth"));
-// add a picture
-app.use("/api/upload", require("./routes/upload"));
-app.use("/api/album", require("./routes/album"));
+// getUser
+app.use("/api/user", require("./routes/user"));
+
 // CRUD
 
 app.listen(process.env.PORT, () => {

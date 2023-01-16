@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col, Container, Image, Row, Stack } from "react-bootstrap";
 import NavigationBar from "../Navbar/NavigationBar";
 import gravatar from "../../assets/images/avatar.svg";
@@ -7,10 +7,37 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
+import { usePrivate } from "../hooks/usePrivate";
+import { setCookie } from "../utils/cookieFactory";
 
 export const Profile = () => {
-  const { userInfo } = useSelector((state) => state.signUp);
-  const { username, firstName, lastName, email, bio } = userInfo;
+  const { idUser: id } = useSelector((state) => state.signUp.userInfo);
+
+  const [user, setUser] = useState();
+  const axiosPrivate = usePrivate();
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    const getUser = async () => {
+      try {
+        console.log(id);
+        const response = await axiosPrivate.get(`/user/${id}`);
+        isMounted && setUser(response.data);
+        setCookie("UserInfo", JSON.stringify(response.data), 1);
+      } catch (err) {
+        console.error(err);
+        // navigate("/login", { state: { from: location }, replace: true });
+      }
+    };
+    getUser();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
+
   return (
     <>
       <NavigationBar />
@@ -29,7 +56,7 @@ export const Profile = () => {
             <Card>
               <Card.Body>
                 <Card.Title>BIO</Card.Title>
-                <Card.Text>{bio}</Card.Text>
+                <Card.Text>{user?.biography}</Card.Text>
               </Card.Body>
             </Card>
           </Col>
@@ -38,23 +65,23 @@ export const Profile = () => {
               <Row>
                 <Col>
                   <h6>USERNAME</h6>
-                  <p>{username}</p>
+                  <p>{user?.username}</p>
                 </Col>
               </Row>
               <Row>
                 <Col>
                   <h6>FIRSTNAME</h6>
-                  <p>{firstName}</p>
+                  <p>{user?.firstName}</p>
                 </Col>
                 <Col>
                   <h6>LASTNAME</h6>
-                  <p>{lastName}</p>
+                  <p>{user?.lastName}</p>
                 </Col>
               </Row>
               <Row>
                 <Col>
                   <h6>EMAIL</h6>
-                  <p>{email}</p>
+                  <p>{user?.email}</p>
                 </Col>
               </Row>
 

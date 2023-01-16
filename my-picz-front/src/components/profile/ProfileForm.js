@@ -24,11 +24,13 @@ import {
 import { useAuthStore } from "../hooks/useAuthStore";
 import { setAlert } from "../../store/slices/alertSlice/alertSlice";
 import { addAlert } from "../../store/slices/alertSlice/thunk";
+import { getCookie } from "../utils/cookieFactory";
 
 export const ProfileForm = () => {
   const { userInfo, changePassword, validFields } = useSelector(
     (state) => state.signUp
   );
+  console.log(userInfo);
   const { showAlert, alert } = useSelector((state) => state.alert);
   const dispatch = useDispatch();
 
@@ -81,6 +83,8 @@ export const ProfileForm = () => {
   };
 
   useEffect(() => {
+    const user = getCookie("UserInfo");
+    dispatch(signUpUser(JSON.parse(user)));
     dispatch(enableChangePassword(false));
     dispatch(
       messageFieldsValidator({

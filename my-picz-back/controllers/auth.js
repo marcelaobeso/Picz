@@ -34,14 +34,17 @@ const createUser = async (req, res = response) => {
   }
 };
 const updateUserFields = async (req, res = response) => {
-  const { email, password, gravatar } = req.body;
+  const { password } = req.body;
 
-  const salt = bcrypt.genSaltSync();
-  req.body.password = bcrypt.hashSync(password, salt);
+  if (password) {
+    const salt = bcrypt.genSaltSync();
+    req.body.password = bcrypt.hashSync(password, salt);
+  }
 
   //errors handler
   try {
     const dbAns = await updateUser(req.body);
+    console.log(dbAns);
     if (dbAns.answer === "ok") {
       res.status(201).json({
         ok: true,

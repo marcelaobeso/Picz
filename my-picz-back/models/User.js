@@ -31,30 +31,61 @@ const addUser = async (req) => {
 };
 
 const updateUser = async (req) => {
-  console.log("here");
   const {
+    idUser,
     email,
-    password,
     username,
+    password,
     gravatar,
     bio,
     firstName,
     lastName,
-    idUser,
   } = req;
+
   const emailCheck = await pool.query(
     "SELECT* FROM PERSON WHERE EMAIL = $1 OR username = $2",
     [email, username]
   );
 
   if (emailCheck.rowCount !== 0 && emailCheck.rows[0].id_user !== idUser) {
-    console.log("not same user");
     return { answer: "email or username already in database " };
   }
   await pool.query(
-    "UPDATE PERSON SET username = $1, firstname = $2, lastname = $3, email = $4, password = $5, biografy = $6, gravatar = $7 WHERE id_user = $8",
-    [username, firstName, lastName, email, password, bio, gravatar, idUser]
+    "UPDATE PERSON SET username = $1, email = $2 WHERE id_user = $3;",
+    [username, email, idUser]
   );
+  // firstName,
+  console.log(firstName);
+  if (firstName) {
+    const res = await pool.query(
+      "UPDATE PERSON SET firstname = $1 WHERE id_user = $2",
+      [firstName, idUser]
+    );
+  }
+  // lastName,
+  lastName &&
+    (await pool.query("UPDATE PERSON SET lastname = $1 WHERE id_user = $2", [
+      lastName,
+      idUser,
+    ]));
+  // password,
+  password &&
+    (await pool.query("UPDATE PERSON SET password = $1 WHERE id_user = $2", [
+      password,
+      idUser,
+    ]));
+  // bio,
+  bio &&
+    (await pool.query("UPDATE PERSON SET biografy = $1 WHERE id_user = $2", [
+      bio,
+      idUser,
+    ]));
+  // gravatar,
+  gravatar &&
+    (await pool.query("UPDATE PERSON SET gravatar = $1 WHERE id_user = $2", [
+      gravatar,
+      idUser,
+    ]));
   const { rows } = await pool.query("SELECT* FROM PERSON WHERE id_user = $1", [
     idUser,
   ]);
@@ -66,6 +97,7 @@ const updateUser = async (req) => {
 
 const loginUser = async (req) => {
   const { username, password } = req;
+
   const userCheck = await pool.query(
     "SELECT* FROM PERSON WHERE username = $1",
     [username]
@@ -78,7 +110,6 @@ const loginUser = async (req) => {
   if (!hashPass) {
     return { answer: "User or password are incorrect" };
   }
-  console.log(userCheck);
   const token = await generateJWT(
     userCheck.rows[0].id_user,
     userCheck.rows[0].email
@@ -89,7 +120,6 @@ const loginUser = async (req) => {
     token: token,
     idUser: userCheck.rows[0].id_user,
     email: userCheck.rows[0].email,
-    id_user: 3,
     firstname: userCheck.rows[0].firstname,
     lastname: userCheck.rows[0].lastname,
     biografy: userCheck.rows[0].biografy,

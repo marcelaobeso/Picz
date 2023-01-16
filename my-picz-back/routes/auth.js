@@ -51,7 +51,7 @@ router.put(
     //middlewares
     check("idUser", "idUser must be entered").not().isEmpty(),
     check("username", "username must be entered").not().isEmpty(),
-    check("password", "password must be entered").not().isEmpty(),
+    check("email", "email must be entered").not().isEmpty(),
     fieldsValidator,
   ],
   validateJWT,
@@ -63,8 +63,8 @@ router.get(
   [
     //middlewares
     check("token", "no token to validate").not().isEmpty(),
-    validateJWT,
   ],
+  validateJWT,
   renewUser
 );
 

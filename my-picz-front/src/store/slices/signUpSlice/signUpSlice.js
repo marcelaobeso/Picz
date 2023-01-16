@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { deleteCookie } from "../../../components/utils/cookieFactory";
 
 const initialState = {
   loggedStatus: false,
@@ -37,7 +38,7 @@ export const signUpSlice = createSlice({
       state.userInfo.password2 = payload.password2;
       state.userInfo.idUser = payload.idUser;
       state.userInfo.username = payload.username;
-      state.userInfo.bio = payload.bio;
+      state.userInfo.bio = payload.biography;
     },
 
     logoutUser: (state) => {
@@ -51,6 +52,7 @@ export const signUpSlice = createSlice({
       state.userInfo.idUser = null;
       state.loggedStatus = false;
       localStorage.clear();
+      deleteCookie("UserInfo");
     },
 
     fristNameFieldsValidator: (state, { payload }) => {

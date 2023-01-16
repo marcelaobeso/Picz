@@ -1,6 +1,7 @@
 import piczApi from "../../../api/piczApi";
 import { setAlert } from "../alertSlice/alertSlice";
 import { addAlert } from "../alertSlice/thunk";
+import { allPictures } from "../pictureSlice/pictureSlice";
 import { setAlbums, setRelationships } from "./albumSlice";
 
 //upload a single picture along with its information
@@ -57,6 +58,26 @@ export const linkAndCreateAlbum = (id_photo, name) => {
       typeof error.response.data.msg == "string"
         ? dispatch(setAlert(error.response.data.msg))
         : dispatch(setAlert("unable to link photo to this album"));
+      dispatch(addAlert());
+    }
+  };
+};
+
+export const getRelations = () => {
+  return async (dispatch, getState) => {
+    const id_album = { id_album: getState().album.album.id_album };
+
+    try {
+      const { data } = await piczApi.get("/album/pictures", {
+        params: id_album,
+      });
+      console.log(data.photos);
+      data && dispatch(allPictures(data.photos));
+    } catch (error) {
+      console.log(error);
+      typeof error.response.data.msg === String
+        ? dispatch(setAlert(error.response.data.msg))
+        : dispatch(setAlert("unable to get albums for this user."));
       dispatch(addAlert());
     }
   };

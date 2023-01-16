@@ -44,4 +44,16 @@ const createRelationAndAlbum = async (info) => {
     answer: "added to album",
   };
 };
-module.exports = { createRelation, createRelationAndAlbum };
+
+const getAllRelations = async (id_album) => {
+  const { rows } = await pool.query(
+    "select distinct on (p.id_photo)  p.id_photo, p.title, p.description, p.url  FROM relationship r join photo p on r.id_photo = p.id_photo WHERE id_album = $1;",
+    [id_album]
+  );
+  console.log(rows);
+  return {
+    answer: "ok",
+    photos: rows,
+  };
+};
+module.exports = { createRelation, createRelationAndAlbum, getAllRelations };
