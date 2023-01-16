@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: picz-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: picz-front
+  template:
+    metadata:
+      labels:
+        app: picz-front
+    spec:
+      containers:
+      - name: picz-front
+        image: gcr.io/piczapp/marcelaobeso/picz-back-amd:latest
+        env:
+          - name: REACT_APP_API_URL
+            valueFrom:
+              secretKeyRef:
+                name: pg-secrets-ag
+                key: REACT_APP_API_URL
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "256m"
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: picz-front
+  ports:
+  - port: 3000
+    targetPort: 80
